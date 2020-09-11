@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Whether Condition</title>
+        <link rel="stylesheet" href="css/stylesheet.css" />
+        <link rel="manifest" href="manifest.json" />
+        <meta name="theme_color" content="db4938" />
+    </head>
+
+    <body id="container">
+
+        <div id="search-container">
+            <div id="search">
+                <input value="London" class="input-button" id="search" type="search" name="search" placeholder="search your location" autofocus required />
+                <button class="input-button" id="submit" type="submit" name="submit">search</button>
+            </div>
+            <input id="date" type="date" name="date" />
+        </div> 
+
+        <div id="row">
+            <p><small id="date">mm/dd/yyyy</small></p>
+
+            <div id="location" class="col-lg-3">
+                <p><span class="city">city</span><span>/</span><span class="country">country</span> </p>
+               
+            </div>
+
+            <div class="weather-icon">
+                <img src="openweathermap-icons/icons/unknown.png" />
+            </div>
+
+            <div id="temperature" class="col-lg-3 temperatur-unit">
+                
+                <span id="temperature-value"></span>
+                <span class="degree">&deg;</span>
+                <span class="unit">C</span>
+                
+            </div>
+
+            <div id="temperature-description" class="col-lg-3">
+                It's <span class="des">cold</span> in
+               <span class="des-loc">city</span>
+               now
+            </div>
+
+            <div class="high-low" class="col-lg-3">
+                
+                <span class="hl-1">0</span>  
+                <span class="degree">&deg;</span>
+                <span class="hl-1-unit">C</span>
+                /
+                <span class="hl-2">0</span>  
+                <span class="degree">&deg;</span>  
+                <span class="hl-2-unit">C</span>
+
+            </div>
+ 
+
+         
+
+        </div>  <!-- end of row -->
+       
+
+        <script src="script/app.js" ></script>
+    </body>
+</html>

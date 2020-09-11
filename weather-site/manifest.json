@@ -1,0 +1,19 @@
+{
+    "name": "OGO'WeatherApp",
+    "short_name": "WeatherApp",
+    "start_url": "index.html",
+    "display": "standalone",
+    "background_color": "#fdfdfd",
+    "theme_color": "#db4938",
+    "orientation": "portrait-primary",
+    "icons": [
+        {
+            "src": "/openweathermap-icons/icons/01d.png",
+            "type": "image/png", "sizes": "96x96"
+        },
+        {
+            "src": "/openweathermap-icons/icons/01d.png",
+            "type": "image/png", "sizes": "128x128"
+        }
+    ]
+}
