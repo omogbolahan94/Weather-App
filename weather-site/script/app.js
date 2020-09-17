@@ -1,130 +1,153 @@
-
-window.addEventListener("load", () => {
-
-    let input = document.querySelector("input#search"),
-        button = document.querySelector("button#submit"),
-        temperatureDescription = document.querySelector("#temperature-description > .des"),
-        temperatureValue = document.querySelector("#temperature > span#temperature-value"),
-        spanUnit = document.querySelector("span.unit"),
-        city = document.querySelector(".city"),
-        country = document.querySelector(".country"),
-        locationIcon = document.querySelector('.weather-icon'),
-        highLow1 = document.querySelector(".hl-1"),
-        highLow2 = document.querySelector(".hl-2"),
-        highLow1Unit = document.querySelector(".hl-1-unit"),
-        highLow2Unit = document.querySelector(".hl-2-unit"),
-        temperature = document.querySelector("div#temperature"); //temperature container
-        desLoc = document.querySelector("#temperature-description > .des-loc");
-
-
-
-   /* let itemsArray = localStorage.getItem('items') ?
-        JSON.parse(localStorage.getItem('items')) :
-        [];*/
-
+let input = document.querySelector("input#search"),
+    button = document.querySelector("button#submit"),
+    content = document.getElementById("row")
+    icon = document.querySelector('#icon'),
+    city = document.getElementsByClassName("city"),
+    country = document.querySelector("#country"),
+    temperature = document.querySelector("#temp"),
+    tempUnit = document.querySelector(".temp-unit"),
+    desc = document.querySelector("desc"),
+    highLow1 = document.querySelector(".hl-1"),
+    highLow2 = document.querySelector(".hl-2"),
+    highLow1Unit = document.querySelector(".hl-1-unit"),
+    highLow2Unit = document.querySelector(".hl-2-unit");
+    //form = document.querySelector("#form"); //temperature container
     
 
-    
-       // localStorage.setItem('items', JSON.stringify(itemsArray));
-    if (!localStorage) {
-        localStorage.setItem("city", JSON.stringify(input.value)); //{"city": inputValue}
-        localStorage.setItem("country", JSON.stringify(country.textContent));
-        localStorage.setItem("temp", JSON.stringify(temperatureValue.textContent));
-        localStorage.setItem("description", JSON.stringify(temperatureDescription.textContent));
-        localStorage.setItem("low", JSON.stringify(highLow1.textContent));
-        localStorage.setItem("high", JSON.stringify(highLow2.textContent));
-        localStorage.setItem("desLoc", JSON.stringify(desLoc.textContent));
-        
-    }
 
-    let proxy = "http://cors-anywhere.herokuapp.com/",
-        key = `&appid=ee2798328aa7160fd1a37d3ad3a29b1a`,
-        url = `${proxy}http://api.openweathermap.org/data/2.5/weather?q=`;
-        unit = `&units=metric`;
+//if the localStorage key("weatherDarta") does not exist already, create an empty array
+//else get weatherData from localStorage and convert the JSON data to pure array of JS objects
+let weatheArray = JSON.parse(localStorage.getItem("weatherData")) || []; 
+
+document.addEventListener("DOMContentLoaded", function () {
+    getWeatherContent(weatheArray);
+    console.log(weatheArray);
+})
+
+
+let proxy = "http://cors-anywhere.herokuapp.com/",
+    key = `&appid=ee2798328aa7160fd1a37d3ad3a29b1a`,
+    url = `${proxy}http://api.openweathermap.org/data/2.5/weather?q=`;
+    unit = `&units=metric`;
 
   
 
-    function weatherResult() {
-        if (input.value) {
-            api = url + input.value + key + unit;
-            fetch(api)
-                .then(response => { 
-                    return response.json()
-                })
-                .then(data => {
-
-                    console.log(data);
-                    
-                    //resetting the value of the DOM stored locally
-                    temp = data.main.temp;
-                    
-                   /* itemsArray.push(data.name); //city name
-                    itemsArray.push(temp);
-                    itemsArray.push(data.weather[0].main);
-                    itemsArray.push(data.sys.country);
-                    itemsArray.push(data.main.temp_min);
-                    itemsArray.push(data.main.temp_max);
-                    itemsArray.push(data.name); //city name
-                    
-                    localStorage.setItem('items', JSON.stringify(itemsArray));
-
-                    city.textContent = dataItems[0];
-                    temperatureValue.textContent = dataItems[1];
-                    temperatureDescription.textContent = dataItems[2];
-                    country.textContent = dataItems[3];
-                    highLow1.textContent = dataItems[4];
-                    highLow2.textContent = dataItems[5];
-                    desLoc.textContent = dataItems[6];*/
-                    if (input.value) {
-                        localStorage.setItem("city", JSON.stringify(input.value)); //{"city": inputValue}
-                        localStorage.setItem("country", JSON.stringify(data.sys.country));
-                        localStorage.setItem("temp", JSON.stringify(temp));
-                        localStorage.setItem("description", JSON.stringify(data.weather[0].main));
-                        localStorage.setItem("low", JSON.stringify(data.main.temp_min));
-                        localStorage.setItem("high", JSON.stringify(data.main.temp_max));
-                        localStorage.setItem("desLoc", JSON.stringify(data.name));
-                        
-                        city.textContent = JSON.parse(localStorage.getItem("city"));
-                        temperatureValue.textContent = JSON.parse(localStorage.getItem("temp"));
-                        temperatureDescription.textContent = JSON.parse(localStorage.getItem("description"));
-                        country.textContent = JSON.parse(localStorage.getItem("country"));
-                        highLow1.textContent = JSON.parse(localStorage.getItem("low"));
-                        highLow2.textContent = JSON.parse(localStorage.getItem("high"));
-                        desLoc.textContent = JSON.parse(localStorage.getItem("desLoc"));
-
-                        locationIcon.innerHTML = `<img src="openweathermap-icons/icons/${data.weather[0].icon}.png">`;
-                        temperature.addEventListener('click', celciusToFahrenheit);
-                    }
-            })
-        }     
-    } //end of weatherFunc
-
-
-
-    button.addEventListener('click',  weatherResult) //calling the api through the buttlon click
-    
-    
-    function celciusToFahrenheit() {
-        let fahrenheit = Math.floor((9/5 * temp) + 32);
-
-        if (spanUnit.textContent === 'C' && highLow1) {
-            spanUnit.textContent = 'F';
-            temperatureValue.textContent =  fahrenheit;
-            highLow1.textContent = fahrenheit;
-            highLow2.textContent = fahrenheit;
-            highLow1Unit.textContent = 'F';
-            highLow2Unit.textContent = 'F';
-
-        } else {
-            spanUnit.textContent = 'C';
-            temperatureValue.textContent = temp;
-            highLow1.textContent = temp;
-            highLow2.textContent = temp;
-            highLow1Unit.textContent = 'C';
-            highLow2Unit.textContent = 'C';
-        }
-    } //end of celciusToFerhrenheit
-
-   
+function weatherResult(destination) {
         
-})  //end of window load
+    api = url + destination + key + unit;
+    
+    fetch(api)
+        .then(response => { 
+            return response.json()
+        })
+        .then(data => {
+            weatheArray.unshift(data); //using unshift instead of push to add the JSON data into the index 0 ofweather array 
+            console.log(data);
+            console.log(weatheArray);
+            //converting the list of object to JSON and storing it in local storage with key name "weatherData"
+            localStorage.setItem("weatherData", JSON.stringify(weatheArray)); 
+            //reloading the page after 3500ms once the data is stored in localStorage instead of reloading it 
+            setTimeout( () => {
+                location.reload();
+            }, 3500); 
+        })
+        .catch(error => {
+            console.log(error);
+        });
+}  //end of weatherResult
+
+
+//function that updates the html file
+const getWeatherContent = (arr) => {
+    let mappedArr = arr.map( (data) => {
+        return `<div id="location" class="col-lg-3">
+                    <p><span class="city">${data.name}</span><span>/</span><span id="country">${data.sys.country}</span> </p>
+            
+                </div>
+
+                <div id="icon">
+                    <!-- <img src="openweathermap-icons/icons/unknown.png" /> -->
+                </div>
+
+                <div id="temperature" class="col-lg-3 temperatur-unit">
+                    
+                    <span id="temp">${data.main.temp}</span>
+                    <span class="degree">&deg;</span>
+                    <span class="temp-unit">C</span>
+                    
+                </div>
+
+                <div id="description" class="col-lg-3">
+                    It's <span id="desc">${data.weather.map(item => item.description)}</span> in
+                <span class="city">${data.name}</span>
+                now
+                </div>
+
+                <div class="high-low" class="col-lg-3">
+                    
+                    <span class="hl-1">${data.main.temp_min}</span>  
+                    <span class="degree">&deg;</span>
+                    <span class="hl-1-unit">C</span>
+                    /
+                    <span class="hl-2">${data.main.temp_max}</span>  
+                    <span class="degree">&deg;</span>  
+                    <span class="hl-2-unit">C</span>
+
+                </div>`
+
+    })
+
+    //mappedArr = mappedArr.join(""); //converts array to string
+    content.innerHTML = mappedArr;
+}  //END OF getWeatherContent
+
+
+
+
+//function that calls the api
+function handleSubmit(e) {
+    e.preventDefault();
+
+    //passing input.value which is our destination into the weatherResult and calling it when the handler is triggered by clicking the button 
+    weatherResult(input.value);
+
+    //also calling the getWeastherContent
+    getWeatherContent(weatheArray);
+
+    console.log(input.value, " :location submitted");
+
+    
+    input.value = ""; 
+
+} //END OF HANDLER FUNCTION
+                
+                        
+        
+
+function celciusToFahrenheit() {
+    let fahrenheit = Math.floor((9/5 * temp) + 32);
+
+    if (spanUnit.textContent === 'C' && highLow1) {
+        spanUnit.textContent = 'F';
+        temperatureValue.textContent =  fahrenheit;
+        highLow1.textContent = fahrenheit;
+        highLow2.textContent = fahrenheit;
+        highLow1Unit.textContent = 'F';
+        highLow2Unit.textContent = 'F';
+
+    } else {
+        spanUnit.textContent = 'C';
+        temperatureValue.textContent = temp;
+        highLow1.textContent = temp;
+        highLow2.textContent = temp;
+        highLow1Unit.textContent = 'C';
+        highLow2Unit.textContent = 'C';
+    }
+} //end of celciusToFerhrenheit
+
+
+button.addEventListener('click', handleSubmit); //calling the api through the buttlon click
+//temperature.addEventListener('click', celciusToFahrenheit);
+    
+ //icon.innerHTML = `<img src="openweathermap-icons/icons/${data.weather[0].icon}.png">`;   
+
